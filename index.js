@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', (event) => {
 async function runExample() {
     // Initialize the Float32Array with the correct length
     var x = new Float32Array(4);
@@ -28,3 +29,5 @@ async function runExample() {
         console.error('Error during model loading or inference:', error);
     }
 }
+   window.runExample = runExample;
+});
