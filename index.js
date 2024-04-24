@@ -22,6 +22,11 @@ async function runExample() {
 
    let predictions = document.getElementById('predictions');
 
+   let isReal = outputData > 0.5 ? "Real" : "Fake";
+   predictions.innerHTML = ` <hr> Prediction: <b>${isReal}</b> <br/>`;
+ 
+
+    
   predictions.innerHTML = ` <hr> Got an output tensor with values: <br/>
    <table>
      <tr>
