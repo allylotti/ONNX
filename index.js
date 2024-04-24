@@ -1,3 +1,4 @@
+window.runExample = runExample;
 async function runExample() {
 
     var x = new Float32Array( 1, 4 )
@@ -15,7 +16,7 @@ async function runExample() {
     let session = await ort.InferenceSession.create('xgboost_BankNote_ort.onnx');
     
    let result = await session.run(feeds);
-   let outputData = result.variable.data;
+   let outputData = result.output1.data;
 
   outputData = parseFloat(outputData).toFixed(2)
 
@@ -29,6 +30,4 @@ async function runExample() {
      </tr>
   </table>`;
     
-  window.runExample = runExample;
-
 }
