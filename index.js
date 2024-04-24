@@ -1,4 +1,3 @@
-window.runExample = runExample;
 async function runExample() {
 
     var x = new Float32Array( 1, 4 )
@@ -32,3 +31,5 @@ async function runExample() {
   </table>`;
     
 }
+
+window.runExample = runExample;
