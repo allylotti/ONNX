@@ -20,10 +20,10 @@ async function runExample() {
 
   outputData = parseFloat(outputData).toFixed(2)
     
-   let isReal = outputData > 0.5 ? "Real" : "Fake";
+
    let predictions = document.getElementById('predictions');
 
-  predictions.innerHTML = ` <hr> Prediction: <b>${isReal}</b> <br/>`;
+  predictions.innerHTML = ` <hr> Genuine / Forged: <br/>
    <table>
      <tr>
        <td>  Real or Fake  </td>
