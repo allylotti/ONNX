@@ -1,55 +1,34 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Dynamically load the ONNX Runtime Web library
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js";
-    script.onload = () => {
-        // ONNX Runtime Web library is now loaded and available
+async function runExample() {
 
-        async function runExample() {
-            console.log('runExample is called'); // Verify that runExample is triggered
+    var x = new Float32Array( 1, 4 )
 
-            // Initialize the Float32Array with the correct length
-            const x = new Float32Array(4);
-            x[0] = parseFloat(document.getElementById('box1').value);
-            x[1] = parseFloat(document.getElementById('box2').value);
-            x[2] = parseFloat(document.getElementById('box3').value);
-            x[3] = parseFloat(document.getElementById('box4').value);
+    var x = [];
 
-            // Log the input values to verify they are being read correctly
-            console.log('Input values:', x);
+     x[0] = document.getElementById('box1').value;
+     x[1] = document.getElementById('box2').value;
+     x[2] = document.getElementById('box3').value;
+     x[3] = document.getElementById('box4').value;
+ 
+    let tensorX = new ort.Tensor('float32', x, [1, 4] );
+    let feeds = {float_input: tensorX};
 
-            try {
-                console.log('Creating inference session...');
-                const session = new onnx.InferenceSession();
+    let session = await ort.InferenceSession.create('xgboost_BankNote_ort.onnx');
+    
+   let result = await session.run(feeds);
+   let outputData = result.variable.data;
 
-                console.log('Loading the model...');
-                await session.loadModel("./DLnet_BanknoteData.onnx");
-                console.log('Model loaded successfully.');
+  outputData = parseFloat(outputData).toFixed(2)
 
-                // Create the tensor with the correct shape
-                const tensorX = new onnx.Tensor(x, 'float32', [1, 4]);
+   let predictions = document.getElementById('predictions');
 
-                console.log('Running inference...');
-                const outputMap = await session.run({ input1: tensorX });
-                const outputData = outputMap.get('output1');
+  predictions.innerHTML = ` <hr> Got an output tensor with values: <br/>
+   <table>
+     <tr>
+       <td>  Real or Fake  </td>
+       <td id="td0">  ${outputData}  </td>
+     </tr>
+  </table>`;
+    
+  window.runExample = runExample;
 
-                // Display the prediction result
-                const predictions = document.getElementById('predictions');
-                predictions.innerHTML = `<hr>Got an output tensor with values:<br/>
-                                        <table><tr><td>Real or Fake</td>
-                                        <td id="td0">${outputData.data[0].toFixed(2)}</td>
-                                        </tr></table>`;
-                console.log('Inference completed. Output:', outputData.data);
-            } catch (error) {
-                console.error('Error during model loading or inference:', error);
-            }
-        }
-
-        // Make the runExample function available to the window object
-        window.runExample = runExample;
-    };
-    script.onerror = () => {
-        console.error('The ONNX Runtime Web library could not be loaded.');
-    };
-    document.head.appendChild(script);
-});
+}
