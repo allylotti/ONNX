@@ -15,7 +15,7 @@ async function runExample() {
     let session = await ort.InferenceSession.create('DLnet_BanknoteData.onnx');
     
    let result = await session.run(feeds);
-   let outputData = result.output1.data;
+   let outputData = result.variable.data;
 
   outputData = parseFloat(outputData).toFixed(2)
     
