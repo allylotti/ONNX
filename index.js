@@ -1,35 +1,34 @@
 async function runExample() {
-    try {
-        let x = [
-            parseFloat(document.getElementById('box1').value),
-            parseFloat(document.getElementById('box2').value),
-            parseFloat(document.getElementById('box3').value),
-            parseFloat(document.getElementById('box4').value)
-        ];
 
-        let tensorX = new ort.Tensor('float32', x, [1, 4]);
-        let feeds = { float_input: tensorX };
+    var x = new Float32Array( 1, 4 )
 
-        let session = await ort.InferenceSession.create('xgboost_BankNote_ort.onnx');
-        let result = await session.run(feeds);
+    var x = [];
 
-        // Make sure 'output1' is the correct output name
-        let outputData = result.output1.data;
+     x[0] = document.getElementById('box1').value;
+     x[1] = document.getElementById('box2').value;
+     x[2] = document.getElementById('box3').value;
+     x[3] = document.getElementById('box4').value;
+ 
+    let tensorX = new ort.Tensor('float32', x, [1, 4] );
+    let feeds = {float_input: tensorX};
 
-        // Ensure the output is correctly interpreted as a number
-        outputData = parseFloat(outputData).toFixed(2);
+    let session = await ort.InferenceSession.create('xgboost_BankNote_ort.onnx');
+    
+   let result = await session.run(feeds);
+   let outputData = result.output1.data;
 
-        let predictions = document.getElementById('predictions');
-        predictions.innerHTML = ` <hr> Genuine / Forged: <br/>
-            <table>
-                <tr>
-                    <td>  Real or Fake  </td>
-                    <td id="td0">  ${outputData}  </td>
-                </tr>
-            </table>`;
-    } catch (error) {
-        console.error('Error running model inference', error);
-    }
+  outputData = parseFloat(outputData).toFixed(2)
+    
+
+   let predictions = document.getElementById('predictions');
+
+  predictions.innerHTML = ` <hr> Genuine / Forged: <br/>
+   <table>
+     <tr>
+       <td>  Real or Fake  </td>
+       <td id="td0">  ${outputData}  </td>
+     </tr>
+  </table>`;
+    
 }
 
-window.runExample = runExample;
