@@ -14,13 +14,13 @@ async function runExample() {
 
     let session = await ort.InferenceSession.create('DLnet_BanknoteData.onnx');
     
-   let result = await session.run(feeds);
-   let outputData = result.variable.data;
+    let result = await session.run(feeds);
+    let outputData = result.output1.data;
 
   outputData = parseFloat(outputData).toFixed(2)
     
 
-   let predictions = document.getElementById('predictions');
+    let predictions = document.getElementById('predictions');
 
   predictions.innerHTML = ` <hr> Genuine / Forged: <br/>
    <table>
