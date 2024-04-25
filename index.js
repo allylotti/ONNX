@@ -12,7 +12,7 @@ async function runExample() {
     let tensorX = new ort.Tensor('float32', x, [1, 4] );
     let feeds = {float_input: tensorX};
 
-    let session = await ort.InferenceSession.create('xgboost_BankNote_ort.onnx');
+    let session = await ort.InferenceSession.create('DLnet_BanknoteData.onnx');
     
    let result = await session.run(feeds);
    let outputData = result.output1.data;
