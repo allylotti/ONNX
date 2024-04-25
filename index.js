@@ -8,27 +8,26 @@ async function runExample() {
      x[1] = document.getElementById('box2').value;
      x[2] = document.getElementById('box3').value;
      x[3] = document.getElementById('box4').value;
- 
-    let tensorX = new ort.Tensor('float32', x, [1, 4] );
-    let feeds = {float_input: tensorX};
 
-    let session = await ort.InferenceSession.create('DLnet_BanknoteData.onnx');
-    
-    let result = await session.run(feeds);
-    let outputData = result.output1.data;
 
-  outputData = parseFloat(outputData).toFixed(2)
-    
+    let tensorX = new onnx.Tensor(x, 'float32', [1, 4]);
 
-    let predictions = document.getElementById('predictions');
+    let session = new onnx.InferenceSession();
 
-  predictions.innerHTML = ` <hr> Genuine / Forged: <br/>
+    await session.loadModel("./DLnet_BanknoteData.onnx");
+    let outputMap = await session.run([tensorX]);
+    let outputData = outputMap.get('output1');
+
+   let predictions = document.getElementById('predictions');
+
+  predictions.innerHTML = ` <hr> Got an output tensor with values: <br/>
    <table>
      <tr>
        <td>  Real or Fake  </td>
-       <td id="td0">  ${outputData}  </td>
+       <td id="td0">  ${outputData.data[0].toFixed(2)}  </td>
      </tr>
   </table>`;
     
-}
 
+
+}
