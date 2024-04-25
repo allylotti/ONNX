@@ -1,27 +1,39 @@
+
 async function runExample() {
-    let x = new Float32Array(4);
 
-    x[0] = parseFloat(document.getElementById('box1').value);
-    x[1] = parseFloat(document.getElementById('box2').value);
-    x[2] = parseFloat(document.getElementById('box3').value);
-    x[3] = parseFloat(document.getElementById('box4').value);
+  var x = [];
 
-    let tensorX = new onnx.Tensor(x, 'float32', [1, 4]);
-    let session = new onnx.InferenceSession();
-    await session.loadModel("./DLnet_BanknoteData.onnx");
-    
-    // Make sure 'input1' matches the expected input name of the model
-    let inputName = 'input1'; // This should be the actual input name expected by the model
-    let outputMap = await session.run({ [inputName]: tensorX });
-    let outputData = outputMap.get('output1');
+  x[0] = document.getElementById('box1').value;
+  x[1] = document.getElementById('box2').value;
+  x[2] = document.getElementById('box3').value;
+  x[3] = document.getElementById('box4').value;
+  x[4] = document.getElementById('box5').value;
+  x[5] = document.getElementById('box6').value;
+  x[6] = document.getElementById('box7').value;
+  x[7] = document.getElementById('box8').value;
+  x[8] = document.getElementById('box9').value;
+  x[9] = document.getElementById('box10').value;
+  x[10] = document.getElementById('box11').value;
 
-    let predictions = document.getElementById('predictions');
-    predictions.innerHTML = `
-        <hr> Got an output tensor with values: <br/>
-        <table>
-            <tr>
-                <td>Real or Fake</td>
-                <td id="td0">${outputData.data[0].toFixed(2)}</td>
-            </tr>
-        </table>`;
+  let tensorX = new onnx.Tensor(x, 'float32', [1, 4]);
+
+  let session = new onnx.InferenceSession();
+
+  await session.loadModel("DLnet_BanknoteData.onnx");
+  let outputMap = await session.run([tensorX]);
+  let outputData = outputMap.get('output1');
+
+  
+  let predictions = document.getElementById('predictions');
+  predictions.innerHTML = ` <hr> Got an output tensor with value: <br />
+  <table>
+     <tr>
+        <td>  Real or Fake  </td>
+        <td id="td0">  ${outputData.data[0].toFixed(2)}  </td>
+     </tr>
+  </table>
+  `;
+
+
+  
 }
